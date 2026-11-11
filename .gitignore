@@ -1,0 +1,20 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/app/build/
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+.kotlin/
+
+# Milestone 5 – bí mật, không đưa lên GitHub
+secrets.properties
+keystore.properties
+*.jks
+*.keystore
+app/google-services.json

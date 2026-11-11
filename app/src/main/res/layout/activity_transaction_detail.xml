@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="@string/title_detail" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvIcon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/bg_icon_circle"
+            android:gravity="center"
+            android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="?attr/textAppearanceTitleLarge" />
+
+        <TextView
+            android:id="@+id/tvAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/TextAppearance.SpendWise.Amount" />
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:stretchColumns="1">
+
+            <TableRow android:paddingVertical="6dp">
+                <TextView android:text="@string/label_type" android:textColor="@color/text_secondary" />
+                <TextView android:id="@+id/tvType" android:gravity="end" />
+            </TableRow>
+
+            <TableRow android:paddingVertical="6dp">
+                <TextView android:text="@string/label_category" android:textColor="@color/text_secondary" />
+                <TextView android:id="@+id/tvCategory" android:gravity="end" />
+            </TableRow>
+
+            <TableRow android:paddingVertical="6dp">
+                <TextView android:text="@string/label_date" android:textColor="@color/text_secondary" />
+                <TextView android:id="@+id/tvDate" android:gravity="end" />
+            </TableRow>
+
+            <TableRow android:paddingVertical="6dp">
+                <TextView android:text="@string/label_note" android:textColor="@color/text_secondary" />
+                <TextView android:id="@+id/tvNote" android:gravity="end" />
+            </TableRow>
+        </TableLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>
