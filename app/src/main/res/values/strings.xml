@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SpendWise</string>
+    <string name="app_slogan">Quản lý chi tiêu cá nhân</string>
+
+    <!-- Bottom nav -->
+    <string name="tab_home">Tổng quan</string>
+    <string name="tab_transactions">Giao dịch</string>
+    <string name="tab_statistics">Thống kê</string>
+    <string name="tab_profile">Tài khoản</string>
+
+    <!-- Auth -->
+    <string name="login_title">Đăng nhập</string>
+    <string name="login_subtitle">Chào mừng bạn quay lại SpendWise</string>
+    <string name="register_title">Tạo tài khoản</string>
+    <string name="forgot_title">Quên mật khẩu</string>
+    <string name="forgot_subtitle">Nhập email đã đăng ký, chúng tôi sẽ gửi link đặt lại mật khẩu.</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="hint_confirm_password">Nhập lại mật khẩu</string>
+    <string name="hint_full_name">Họ và tên</string>
+    <string name="hint_phone">Số điện thoại</string>
+    <string name="action_login">Đăng nhập</string>
+    <string name="action_register">Đăng ký</string>
+    <string name="action_send">Gửi link</string>
+    <string name="action_forgot">Quên mật khẩu?</string>
+    <string name="action_go_register">Chưa có tài khoản? Đăng ký</string>
+    <string name="action_go_login">Đã có tài khoản? Đăng nhập</string>
+    <string name="demo_hint">Đăng nhập bằng tài khoản Firebase. Chưa có tài khoản? Bấm Đăng ký.</string>
+    <string name="msg_reset_sent">Đã gửi link đặt lại mật khẩu, vui lòng kiểm tra email.</string>
+
+    <!-- Validation -->
+    <string name="error_email">Email không hợp lệ</string>
+    <string name="error_password">Mật khẩu tối thiểu 6 ký tự</string>
+    <string name="error_confirm">Mật khẩu nhập lại không khớp</string>
+    <string name="error_name">Vui lòng nhập tên</string>
+    <string name="error_title">Vui lòng nhập nội dung</string>
+    <string name="error_amount">Số tiền phải lớn hơn 0</string>
+    <string name="error_category">Vui lòng chọn danh mục</string>
+
+    <!-- Home -->
+    <string name="home_greeting">Xin chào, %1$s</string>
+    <string name="home_balance">Số dư tháng này</string>
+    <string name="income">Thu nhập</string>
+    <string name="expense">Chi tiêu</string>
+    <string name="recent_transactions">Giao dịch gần đây</string>
+    <string name="see_all">Xem tất cả</string>
+    <string name="add_transaction">Thêm giao dịch</string>
+
+    <!-- Transactions -->
+    <string name="filter_all">Tất cả</string>
+    <string name="filter_category">Danh mục</string>
+    <string name="search_hint">Tìm giao dịch…</string>
+    <string name="empty_transactions">Chưa có giao dịch nào</string>
+    <string name="transaction_subtitle">%1$s • %2$s</string>
+    <string name="no_category">Không rõ</string>
+
+    <!-- Add / Edit -->
+    <string name="title_add_transaction">Thêm giao dịch</string>
+    <string name="title_edit_transaction">Sửa giao dịch</string>
+    <string name="hint_title">Nội dung</string>
+    <string name="hint_amount">Số tiền (đ)</string>
+    <string name="hint_note">Ghi chú</string>
+    <string name="label_category">Danh mục</string>
+    <string name="label_date">Ngày</string>
+    <string name="choose_category">Chọn danh mục</string>
+    <string name="action_save">Lưu</string>
+    <string name="msg_saved">Đã lưu giao dịch</string>
+
+    <!-- Detail -->
+    <string name="title_detail">Chi tiết giao dịch</string>
+    <string name="action_edit">Sửa</string>
+    <string name="action_delete">Xóa</string>
+    <string name="confirm_delete_title">Xóa giao dịch?</string>
+    <string name="confirm_delete_message">Giao dịch này sẽ bị xóa vĩnh viễn.</string>
+    <string name="label_type">Loại</string>
+    <string name="label_note">Ghi chú</string>
+    <string name="msg_deleted">Đã xóa giao dịch</string>
+
+    <!-- Statistics -->
+    <string name="choose_month">Chọn tháng</string>
+    <string name="stats_by_category">Theo danh mục</string>
+    <string name="empty_stats">Không có dữ liệu trong tháng này</string>
+
+    <!-- Profile -->
+    <string name="profile_transactions">%1$d giao dịch đã ghi</string>
+    <string name="menu_edit_profile">Sửa hồ sơ</string>
+    <string name="menu_categories">Quản lý danh mục</string>
+    <string name="menu_logout">Đăng xuất</string>
+    <string name="confirm_logout_title">Đăng xuất?</string>
+    <string name="confirm_logout_message">Bạn có chắc muốn đăng xuất khỏi SpendWise?</string>
+    <string name="title_edit_profile">Sửa hồ sơ</string>
+    <string name="msg_profile_saved">Đã cập nhật hồ sơ</string>
+
+    <!-- Category -->
+    <string name="title_categories">Danh mục</string>
+    <string name="add_category">Thêm danh mục</string>
+    <string name="hint_category_name">Tên danh mục</string>
+    <string name="hint_category_icon">Biểu tượng (emoji)</string>
+    <string name="msg_category_added">Đã thêm danh mục</string>
+    <string name="msg_category_deleted">Đã xóa danh mục</string>
+    <string name="msg_category_in_use">Danh mục đang được dùng, không thể xóa</string>
+    <string name="confirm_delete_category">Xóa danh mục \"%1$s\"?</string>
+
+    <!-- Budget / Room -->
+    <string name="action_set_budget">Đặt ngân sách</string>
+    <string name="budget_title">Ngân sách tháng</string>
+    <string name="budget_not_set">Chưa đặt ngân sách tháng này</string>
+    <string name="budget_progress">Đã chi %1$s / %2$s (%3$d%%)</string>
+    <string name="error_budget">Số tiền không hợp lệ</string>
+    <string name="menu_sample_data">Tạo dữ liệu mẫu</string>
+    <string name="msg_sample_added">Đã thêm 16 giao dịch mẫu vào Room DB</string>
+
+    <!-- API (Milestone 4) -->
+    <string name="menu_currency">Tỷ giá ngoại tệ</string>
+    <string name="menu_cloud_sync">Đồng bộ đám mây</string>
+    <string name="title_currency">Tỷ giá ngoại tệ</string>
+    <string name="hint_amount_vnd">Số tiền cần đổi</string>
+    <string name="rates_updated">Cập nhật lúc %1$s · nguồn open.er-api.com</string>
+    <string name="title_cloud_sync">Đồng bộ đám mây</string>
+    <string name="action_upload">Tải lên</string>
+    <string name="action_download">Tải về</string>
+    <string name="action_retry">Thử lại</string>
+    <string name="cloud_list_title">Giao dịch trên đám mây</string>
+    <string name="cloud_empty">Chưa có dữ liệu trên đám mây</string>
+    <string name="confirm_delete_remote">Xóa bản sao trên đám mây?</string>
+    <string name="confirm_delete_remote_message">Giao dịch trên máy này vẫn được giữ nguyên.</string>
+
+    <!-- Milestone 5 -->
+    <string name="cd_avatar">Ảnh đại diện</string>
+    <string name="cd_flag">Cờ quốc gia</string>
+
+    <!-- Auto sync -->
+    <string name="action_sync_now">Đồng bộ ngay</string>
+    <string name="auto_sync_hint">Dữ liệu tự đồng bộ khi đăng nhập, mở app, thêm/sửa/xóa giao dịch và khi có mạng trở lại. Đăng nhập cùng tài khoản trên máy khác sẽ thấy dữ liệu này.</string>
+    <string name="sync_syncing">Đang đồng bộ…</string>
+    <string name="sync_done">Đã đồng bộ lúc %1$s</string>
+    <string name="sync_failed">Chưa đồng bộ: %1$s</string>
+
+    <!-- Common -->
+    <string name="action_ok">Đồng ý</string>
+    <string name="action_cancel">Hủy</string>
+</resources>

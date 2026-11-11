@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment android:id="@+id/homeFragment"
+        android:name="com.spendwise.app.ui.home.HomeFragment"
+        android:label="@string/tab_home" />
+    <fragment android:id="@+id/transactionsFragment"
+        android:name="com.spendwise.app.ui.transactions.TransactionsFragment"
+        android:label="@string/tab_transactions" />
+    <fragment android:id="@+id/statisticsFragment"
+        android:name="com.spendwise.app.ui.statistics.StatisticsFragment"
+        android:label="@string/tab_statistics" />
+    <fragment android:id="@+id/profileFragment"
+        android:name="com.spendwise.app.ui.profile.ProfileFragment"
+        android:label="@string/tab_profile" />
+</navigation>
