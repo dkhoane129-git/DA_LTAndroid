@@ -98,5 +98,13 @@ class RoomDaoTest {
         dao.upsert(existing.copy(limitAmount = 6_000_000))
         assertEquals(1, dao.observeAll("u1").first().size)
         assertEquals(6_000_000L, dao.observeBudget("u1", 2026, 10).first()?.limitAmount)
+        // Chọn tháng khác không được dùng chung ngân sách.
+        dao.upsert(BudgetEntity(userId = "u1", year = 2026, month = 11, limitAmount = 2_000_000))
+        dao.upsert(BudgetEntity(userId = "u2", year = 2026, month = 10, limitAmount = 9_000_000))
+        assertEquals(2, dao.observeAll("u1").first().size)
+        assertEquals(2_000_000L, dao.observeBudget("u1", 2026, 11).first()?.limitAmount)
+        assertEquals(9_000_000L, dao.observeBudget("u2", 2026, 10).first()?.limitAmount)
+        dao.delete(existing.copy(limitAmount = 6_000_000))
+        assertNull(dao.getBudget("u1", 2026, 10))
     }
 }

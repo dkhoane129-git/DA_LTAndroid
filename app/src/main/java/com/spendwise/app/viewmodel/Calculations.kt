@@ -35,6 +35,14 @@ object Calculations {
         expense = transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount }
     )
 
+    /** Tránh tràn Long khi tính tỷ lệ chi tiêu / hạn mức. Giới hạn ở Int.MAX_VALUE. */
+    fun budgetPercent(expense: Long, limit: Long?): Int {
+        if (expense <= 0L || limit == null || limit <= 0L) return 0
+        return ((expense.toDouble() / limit.toDouble()) * 100.0)
+            .coerceAtMost(Int.MAX_VALUE.toDouble())
+            .toInt()
+    }
+
     fun categoryStats(
         transactions: List<Transaction>,
         categories: List<Category>,
@@ -44,10 +52,12 @@ object Calculations {
         val total = ofType.sumOf { it.amount }
         val byId = categories.associateBy { it.id }
         return ofType.groupBy { it.categoryId }
-            .mapNotNull { (catId, list) ->
-                val cat = byId[catId] ?: return@mapNotNull null
+            .map { (catId, list) ->
+                // Giữ giao dịch của danh mục đã xóa, không làm mất tiền trong báo cáo.
+                val cat = byId[catId] ?: Category(catId, "Danh mục đã xóa", "📁", type)
                 val sum = list.sumOf { it.amount }
-                CategoryStat(cat, sum, if (total == 0L) 0 else (sum * 100.0 / total).roundToInt())
+                val percent = if (total <= 0L) 0 else (sum.toDouble() / total * 100).roundToInt()
+                CategoryStat(cat, sum, percent.coerceIn(0, 100))
             }
             .sortedByDescending { it.total }
     }

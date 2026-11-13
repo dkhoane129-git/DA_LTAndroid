@@ -39,8 +39,7 @@ class StatisticsViewModel(
         val budget: Long? = null
     ) {
         val budgetPercent: Int
-            get() = if (budget == null || budget == 0L) 0
-            else ((summary.expense * 100) / budget).toInt()
+            get() = Calculations.budgetPercent(summary.expense, budget)
     }
 
     private val now = Calendar.getInstance()
@@ -80,7 +79,7 @@ class StatisticsViewModel(
     }
 
     fun setBudget(amountText: String): Boolean {
-        val amount = amountText.toLongOrNull()?.takeIf { it > 0 } ?: return false
+        val amount = amountText.trim().toLongOrNull()?.takeIf { it > 0 } ?: return false
         viewModelScope.launch { budgetRepository.setLimit(year.value, month.value, amount) }
         return true
     }

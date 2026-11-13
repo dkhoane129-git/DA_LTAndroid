@@ -1,33 +1,33 @@
 package com.spendwise.app.ui.statistics
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
-import com.spendwise.app.databinding.DialogSetBudgetBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.spendwise.app.R
 import com.spendwise.app.adapter.CategoryStatAdapter
+import com.spendwise.app.databinding.DialogSetBudgetBinding
 import com.spendwise.app.databinding.FragmentStatisticsBinding
 import com.spendwise.app.model.TransactionType
-import com.spendwise.app.ui.common.DatePickerDialogFragment
 import com.spendwise.app.util.Formatters
 import com.spendwise.app.util.collectWithLifecycle
 import com.spendwise.app.viewmodel.StatisticsViewModel
-import java.util.Calendar
 
+/** Màn hình thống kê và hạn mức chi tiêu theo tháng. */
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
-    private val binding get() = _binding!!
-
+    private val binding get() = requireNotNull(_binding)
     private val viewModel: StatisticsViewModel by viewModels { StatisticsViewModel.Factory }
+    private var budgetDialog: AlertDialog? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
@@ -35,39 +35,39 @@ class StatisticsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Milestone 5 (LeakCanary): trước đây adapter là field của Fragment nên sống lâu hơn View,
-        // giữ tham chiếu tới RecyclerView cũ sau onDestroyView → leak. Nay tạo adapter theo vòng đời View.
+        // Adapter chỉ tồn tại theo vòng đời View, không lưu trong Fragment.
         val adapter = CategoryStatAdapter()
         binding.rvStats.layoutManager = LinearLayoutManager(requireContext())
         binding.rvStats.setHasFixedSize(true)
         binding.rvStats.adapter = adapter
 
-        childFragmentManager.setFragmentResultListener(REQUEST_MONTH, viewLifecycleOwner) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(REQUEST_MONTH, viewLifecycleOwner) { _, result ->
             viewModel.selectMonth(
-                bundle.getInt(DatePickerDialogFragment.RESULT_YEAR),
-                bundle.getInt(DatePickerDialogFragment.RESULT_MONTH)
+                result.getInt(MonthPickerDialogFragment.RESULT_YEAR),
+                result.getInt(MonthPickerDialogFragment.RESULT_MONTH)
             )
         }
         binding.btnMonth.setOnClickListener {
             val state = viewModel.uiState.value
-            val initial = Calendar.getInstance().apply { set(state.year, state.month, 1) }.timeInMillis
-            DatePickerDialogFragment.newInstance(REQUEST_MONTH, initial)
-                .show(childFragmentManager, DatePickerDialogFragment.TAG)
+            MonthPickerDialogFragment.newInstance(REQUEST_MONTH, state.year, state.month)
+                .show(childFragmentManager, MonthPickerDialogFragment.TAG)
         }
-
         binding.btnSetBudget.setOnClickListener { showBudgetDialog() }
 
         binding.toggleType.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (!isChecked) return@addOnButtonCheckedListener
-            viewModel.selectType(if (checkedId == R.id.btnIncome) TransactionType.INCOME else TransactionType.EXPENSE)
+            if (isChecked) {
+                viewModel.selectType(
+                    if (checkedId == R.id.btnIncome) TransactionType.INCOME else TransactionType.EXPENSE
+                )
+            }
         }
 
         viewModel.uiState.collectWithLifecycle(viewLifecycleOwner) { state ->
             binding.btnMonth.text = Formatters.month(state.year, state.month)
             binding.tvIncome.text = Formatters.money(state.summary.income)
             binding.tvExpense.text = Formatters.money(state.summary.expense)
-            val toggleId = if (state.type == TransactionType.INCOME) R.id.btnIncome else R.id.btnExpense
-            if (binding.toggleType.checkedButtonId != toggleId) binding.toggleType.check(toggleId)
+            val checkedId = if (state.type == TransactionType.INCOME) R.id.btnIncome else R.id.btnExpense
+            if (binding.toggleType.checkedButtonId != checkedId) binding.toggleType.check(checkedId)
             renderBudget(state)
             adapter.submitList(state.stats)
             binding.tvEmpty.isVisible = state.stats.isEmpty()
@@ -76,6 +76,13 @@ class StatisticsFragment : Fragment() {
 
     private fun renderBudget(state: StatisticsViewModel.UiState) {
         val budget = state.budget
+        val indicatorColor = if (budget != null && state.budgetPercent > 100) {
+            R.color.expense
+        } else {
+            R.color.primary
+        }
+        binding.progressBudget.setIndicatorColor(ContextCompat.getColor(requireContext(), indicatorColor))
+
         if (budget == null) {
             binding.tvBudget.setText(R.string.budget_not_set)
             binding.progressBudget.setProgressCompat(0, false)
@@ -87,30 +94,46 @@ class StatisticsFragment : Fragment() {
             Formatters.money(budget),
             state.budgetPercent
         )
-        binding.progressBudget.setProgressCompat(state.budgetPercent.coerceAtMost(100), true)
-        val color = if (state.budgetPercent > 100) R.color.expense else R.color.primary
-        binding.progressBudget.setIndicatorColor(ContextCompat.getColor(requireContext(), color))
+        binding.progressBudget.setProgressCompat(state.budgetPercent.coerceIn(0, 100), true)
     }
 
     private fun showBudgetDialog() {
         val dialogBinding = DialogSetBudgetBinding.inflate(layoutInflater)
         viewModel.uiState.value.budget?.let { dialogBinding.etAmount.setText(it.toString()) }
-        MaterialAlertDialogBuilder(requireContext())
+
+        // Không gắn callback trực tiếp vào setPositiveButton: Android sẽ tự đóng dialog
+        // dù nhập sai. Bắt sự kiện sau show() để người dùng có thể sửa tại chỗ.
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.budget_title)
             .setView(dialogBinding.root)
-            .setPositiveButton(R.string.action_save) { _, _ ->
-                if (!viewModel.setBudget(dialogBinding.etAmount.text?.toString().orEmpty())) {
-                    Snackbar.make(binding.root, R.string.error_budget, Snackbar.LENGTH_SHORT).show()
+            .setPositiveButton(R.string.action_save, null)
+            .setNegativeButton(R.string.action_cancel, null)
+            .create()
+        budgetDialog = dialog
+        dialog.setOnDismissListener {
+            if (budgetDialog === dialog) budgetDialog = null
+        }
+        dialog.setOnShowListener {
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                val amountText = dialogBinding.etAmount.text?.toString().orEmpty().trim()
+                if (viewModel.setBudget(amountText)) {
+                    dialog.dismiss()
+                } else {
+                    dialogBinding.tilAmount.error = getString(R.string.error_budget)
                 }
             }
-            .setNegativeButton(R.string.action_cancel, null)
-            .show()
+        }
+        dialog.show()
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        // Tránh giữ tham chiếu tới View/Context sau khi rời tab hoặc xoay màn hình.
+        budgetDialog?.dismiss()
+        budgetDialog = null
         binding.rvStats.adapter = null
+        binding.rvStats.layoutManager = null
         _binding = null
+        super.onDestroyView()
     }
 
     private companion object {
